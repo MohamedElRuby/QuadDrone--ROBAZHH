@@ -5,8 +5,8 @@
  *      Author: ElRuby
  */
 
-#include "STD_TYPES.h"
-#include "BIT_MATH.h"
+#include "../STD_TYPES.h"
+#include "../BIT_MATH.h"
 #include "Timer_interface.h"
 #include "Timer_register.h"
 

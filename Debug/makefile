@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include MCAL/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -32,8 +33,14 @@ endif
 LSS += \
 QuadDrone.lss \
 
+FLASH_IMAGE += \
+QuadDrone.hex \
+
 SIZEDUMMY += \
 sizedummy \
+
+AVRDUDEDUMMY += \
+avrdudedummy \
 
 
 # All Target
@@ -53,18 +60,30 @@ QuadDrone.lss: QuadDrone.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 
+QuadDrone.hex: QuadDrone.elf
+	@echo 'Create Flash image (ihex format)'
+	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex QuadDrone.elf  "QuadDrone.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 sizedummy: QuadDrone.elf
 	@echo 'Invoking: Print Size'
 	-avr-size --format=avr --mcu=atmega32 QuadDrone.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 
+avrdudedummy: QuadDrone.elf
+	@echo 'Invoking: AVRDude'
+	D:\Embedded\01- IMT SDK\IMT_SDK_Win_64\WinAVR\bin\avrdude -pm32 -cusbasp -Uflash:w:QuadDrone.hex:a
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) $(ELFS)$(OBJS)$(ASM_DEPS)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(LSS)$(C_DEPS) QuadDrone.elf
+	-$(RM) $(FLASH_IMAGE)$(ELFS)$(OBJS)$(ASM_DEPS)$(AVRDUDEDUMMY)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(LSS)$(C_DEPS) QuadDrone.elf
 	-@echo ' '
 
-secondary-outputs: $(LSS) $(SIZEDUMMY)
+secondary-outputs: $(LSS) $(FLASH_IMAGE) $(SIZEDUMMY) $(AVRDUDEDUMMY)
 
 .PHONY: all clean dependents
 .SECONDARY:

@@ -4,18 +4,12 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../DIO_program.c \
-../Timer_program.c \
 ../main.c 
 
 OBJS += \
-./DIO_program.o \
-./Timer_program.o \
 ./main.o 
 
 C_DEPS += \
-./DIO_program.d \
-./Timer_program.d \
 ./main.d 
 
 

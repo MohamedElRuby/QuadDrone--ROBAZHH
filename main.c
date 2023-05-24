@@ -16,7 +16,7 @@ void main(){
 	TIM1_voidSetTimerReg(20000);
 	u16 angleTime;
 	DIO_SetPortDirection(PORTD,PORT_OUTPUT);
-	TIM1_A_voidSetCompareVal(1020);
+	TIM1_A_voidSetCompareVal(1100);
 }
 
 
